@@ -12,16 +12,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CourseLevel extends Model
 {
+    public $timestamps = false;
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'course_level';
 
     /**
      * Indicates if the IDs are auto-incrementing.
-     * 
+     *
      * @var bool
      */
     public $incrementing = false;

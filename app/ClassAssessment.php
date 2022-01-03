@@ -15,23 +15,24 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ClassAssessment extends Model
 {
+    public $timestamps = false;
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'class_assessment';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'class_id';
 
     /**
      * Indicates if the IDs are auto-incrementing.
-     * 
+     *
      * @var bool
      */
     public $incrementing = false;
@@ -64,4 +65,5 @@ class ClassAssessment extends Model
     {
         return $this->belongsTo('App\LearningOutcome');
     }
+
 }

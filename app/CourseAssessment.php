@@ -13,9 +13,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CourseAssessment extends Model
 {
+    public $timestamps = false;
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'course_assessment';
@@ -39,5 +40,24 @@ class CourseAssessment extends Model
     public function assessment()
     {
         return $this->belongsTo('App\Assessment');
+    }
+
+    static function findCourseAssessmentByCourseWithoutComboAss($courseId, $loList): array
+    {
+        $newAssessmentTool = [];
+        foreach($loList as $lo) {
+            $ast = AssessmentTool::where([
+                ['course_id', '=', $courseId],
+                ['loutcome_id', '=', $lo->id],
+                ['assessment_id', '<>', 10],
+            ])->get();
+
+            $assessments =[];
+            foreach($ast as $as)
+                $assessments[$as->assessment_id] = $as->percentage;
+
+            $newAssessmentTool[$lo->id] = $assessments;
+        }
+        return $newAssessmentTool;
     }
 }

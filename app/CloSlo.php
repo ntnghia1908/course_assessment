@@ -13,9 +13,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CloSlo extends Model
 {
+    public $timestamps = false;
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'clo_slo';
@@ -39,5 +40,21 @@ class CloSlo extends Model
     public function learningOutcome()
     {
         return $this->belongsTo('App\LearningOutcome', 'lo_id');
+    }
+
+    static function getAbetMapping($loList): array
+    {
+        $abetMapping = [];
+        foreach ($loList as $lo) {
+            $item = [];
+            for($slo=1; $slo<7; $slo++) {
+                $tem_sloClo = CloSlo::where([ ['lo_id', '=', $lo->id], ['slo_id' ,'=', $slo] ])->get();
+
+                foreach ($tem_sloClo as $sloClo)
+                    $item[$slo] = $sloClo->percentage; // NEED refactor
+            }
+            $abetMapping[$lo->id] = $item;
+        }
+        return $abetMapping;
     }
 }

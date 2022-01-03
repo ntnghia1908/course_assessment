@@ -15,9 +15,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ClassAssessmentCourse extends Model
 {
+    public $timestamps = false;
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'class_assessment_course';

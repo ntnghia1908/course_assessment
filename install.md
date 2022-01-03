@@ -29,6 +29,7 @@ php artisan krlove:generate:model Program --table-name=program
 php artisan krlove:generate:model Result --table-name=result
 php artisan krlove:generate:model Slo --table-name=slo
 php artisan krlove:generate:model Student --table-name=student
+php artisan krlove:generate:model ClassAssessmentTool --table-name=class_assessment_tool
 `
 
 

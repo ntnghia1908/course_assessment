@@ -5,28 +5,36 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $id
  * @property int $assessment_id
+ * @property int $lout_id
+ * @property int $class_id
  * @property string $course_id
- * @property int $loutcome_id
- * @property float $percentage
+ * @property int $percentage
  * @property Assessment $assessment
- * @property Course $course
+ * @property ClassSession $classSession
  * @property LearningOutcome $learningOutcome
  */
-class AssessmentTool extends Model
+class ClassAssessmentTool extends Model
 {
-    public $timestamps = false;
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'assessment_tool';
+    protected $table = 'class_assessment_tool';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * @var array
      */
-    protected $fillable = ['percentage'];
+    protected $fillable = ['assessment_id', 'lout_id', 'class_id', 'course_id', 'percentage'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -39,9 +47,9 @@ class AssessmentTool extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function course()
+    public function classSession()
     {
-        return $this->belongsTo('App\Course');
+        return $this->belongsTo('App\ClassSession', 'class_id');
     }
 
     /**
@@ -49,15 +57,15 @@ class AssessmentTool extends Model
      */
     public function learningOutcome()
     {
-        return $this->belongsTo('App\LearningOutcome', 'loutcome_id');
+        return $this->belongsTo('App\LearningOutcome', 'lout_id');
     }
 
-    static function getByCourseAssessmentAndLO($courseId, $loList): array
+    static function getByClassAssessmentAndLO($classId, $loList): array
     {
         $newAssessmentTool = [];
         foreach($loList as $lo) {
             $ast = AssessmentTool::where([
-                ['course_id', '=', $courseId],
+                ['course_id', '=', $classId],
                 ['loutcome_id', '=', $lo->id],
                 ['assessment_id', '<>', 10],
             ])->get();

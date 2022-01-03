@@ -15,31 +15,60 @@ class LecturerController extends Controller
         //
     }
 
-    function getLecturers() {
+    function getLecturers()
+    {
         $lecturers = Instructor::all();
         return view('Admin/lecturer-list', compact('lecturers'));
     }
 
-    function getLecturerDetail($id) {
+    function getLecturerDetail($id)
+    {
         $lecturer = Instructor::find($id);
 
         // eager load course
-        $classSessions = ClassSession::with('course')->where(['instructor_id'=> $id])->get();
+        $classSessions = ClassSession::with('course')->where(['instructor_id' => $id])->get();
 //        DebugBar::info($classSessions);
         return view('admin.lecturer-detail', compact('lecturer', 'classSessions'));
     }
 
-    function getEditLecturer($id) {
+    function getEditLecturer($id)
+    {
         $lecturer = Instructor::find($id);
         return view('admin.lecturer-edit', compact('lecturer'));
     }
 
-    function deleteLecturer(Request $request) {
+    function editLecturer(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $checkEmail = Instructor::where('email', $request->email)->first();
+            if ($checkEmail && $checkEmail =! $request->email) {
+                return redirect()->back()->with(['flag' => 'danger', 'message' => 'Email is existed',
+                    'key' => 'Fail', 'icon' => 'warning']);
+            }
 
-        if ( $request->isMethod('post') ) {
+            $attributes = $request->except('_token');
+            $attributes['name'] = ucfirst($request->name);;
+            $attributes['email'] = $request->email;
+            $attributes['degree'] = $request->degree;
+
+            $instructor = Instructor::find($request->id);
+            $instructor->fill($attributes);
+            $result = $instructor->update();
+            if ($result)
+                return redirect()->route('admin_get_edit_lecturer', ['id' => $instructor->id])->with(
+                    ['flag' => 'success', 'message' => 'Instructor is updated!', 'key' => 'Success', 'icon' => 'check']);
+            return redirect()->back()->with(['flag' => 'danger', 'message' => 'Cannot update', 'key' => 'Fail', 'icon' => 'warning']);
+        }
+    }
+
+
+    function deleteLecturer(Request $request)
+    {
+
+        if ($request->isMethod('post')) {
             $result = Instructor::find($request->lecturer_id)->delete();
 //            DebugBar::info($request->lecturer_id);
-            if( isset($result) ) {
+            if (isset($result)) {
                 return redirect()->back()->with(['flag' => 'success', 'message' => 'Course is deleted!', 'key' => 'Success']);
             }
 
@@ -60,22 +89,27 @@ class LecturerController extends Controller
         }
     }
 
-    function getAddLecturer() {
+    function getAddLecturer()
+    {
         return view('admin.lecturer-edit');
     }
 
-    function addLecturer(Request $request) {
-        if ( $request->isMethod('post') ) {
+    function addLectsurer(Request $request)
+    {
+        if ($request->isMethod('post')) {
             $checkEmail = Instructor::where('email', $request->email)->first();
-            if($checkEmail) {
-                return redirect()->back()->with(['flag' => 'danger', 'message'=>'Email is existed',
-                                                'key' => 'Fail', 'icon'=> 'warning']);
-            }
 
             $attributes = $request->except('_token');
             $attributes['name'] = ucfirst($request->name);;
             $attributes['email'] = $request->email;
             $attributes['degree'] = $request->degree;
+            $instructor = new Instructor();
+            $instructor->fill($attributes);
+
+            if ($checkEmail) {
+                return redirect()->back()->with(['flag' => 'danger', 'message' => 'Email is existed',
+                    'key' => 'Fail', 'icon' => 'warning']);
+            }
 
 //            if ( $request->hasFile('avatar') ) {
 //                $file = $request->file('avatar');
@@ -83,13 +117,13 @@ class LecturerController extends Controller
 //                $attributes['avatar'] =  Storage::disk()->put($path, $file);
 //            }
 
-            $instructor = new Instructor();
-            $instructor->fill($attributes);
+
             $result = $instructor->save();
-            if ( $result )
-                return redirect()->route('admin_edit_lecturer', ['id' => $instructor->id])->with(
+            if ($result)
+                return redirect()->route('admin_get_lecturers', ['id' => $instructor->id])->with(
                     ['flag' => 'success', 'message' => 'New instructor is created!', 'key' => 'Success', 'icon' => 'check']);
             return redirect()->back()->with(['flag' => 'danger', 'message' => 'Cannot create new user', 'key' => 'Fail', 'icon' => 'warning']);
         }
+
     }
 }

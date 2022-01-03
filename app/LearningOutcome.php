@@ -23,6 +23,7 @@ class LearningOutcome extends Model
      * @var string
      */
     protected $table = 'learning_outcome';
+    public $timestamps = false;
 
     /**
      * Indicates if the IDs are auto-incrementing.

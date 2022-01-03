@@ -13,10 +13,11 @@ class Discipline extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'discipline';
+    public $timestamps = false;
 
     /**
      * @var array

@@ -102,8 +102,9 @@
                                         <div class="card">
                                             <!-- Nav tabs -->
                                             <ul class="nav customtab">
-                                                <li class="nav-item"><a href="#" class="nav-link active show">Assessment
-                                                        Tools</a></li>
+                                                <li class="nav-item">
+                                                    <a href="#" class="nav-link active show">Assessment Tools</a>
+                                                </li>
                                             </ul>
                                             <!-- Tab panes -->
                                             <div class="tab-content">

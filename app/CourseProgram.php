@@ -16,10 +16,11 @@ class CourseProgram extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'course_program';
+    public $timestamps = false;
 
     /**
      * @var array

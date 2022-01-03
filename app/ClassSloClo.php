@@ -15,9 +15,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ClassSloClo extends Model
 {
+    public $timestamps = false;
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'class_slo_clo';
@@ -49,5 +50,21 @@ class ClassSloClo extends Model
     public function slo()
     {
         return $this->belongsTo('App\Slo');
+    }
+
+    static function getClassAbetMapping($loList): array
+    {
+        $abetMapping = [];
+        foreach ($loList as $lo) {
+            $item = [];
+            for($slo=1; $slo<7; $slo++) {
+                $tem_sloClo = ClassSloClo::where([ ['clo_id', '=', $lo->id], ['slo_id' ,'=', $slo] ])->get();
+
+                foreach ($tem_sloClo as $sloClo)
+                    $item[$slo] = $sloClo->percentage; // NEED refactor
+            }
+            $abetMapping[$lo->id] = $item;
+        }
+        return $abetMapping;
     }
 }

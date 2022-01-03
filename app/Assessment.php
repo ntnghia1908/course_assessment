@@ -16,14 +16,15 @@ class Assessment extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'assessment';
+    public $timestamps = false;
 
     /**
      * Indicates if the IDs are auto-incrementing.
-     * 
+     *
      * @var bool
      */
     public $incrementing = false;
@@ -64,4 +65,5 @@ class Assessment extends Model
     {
         return $this->hasMany('App\CourseAssessment');
     }
+
 }

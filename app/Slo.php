@@ -13,9 +13,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Slo extends Model
 {
+    public $timestamps = false;
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'slo';
