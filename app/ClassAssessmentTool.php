@@ -63,19 +63,31 @@ class ClassAssessmentTool extends Model
     static function getByClassAssessmentAndLO($classId, $loList): array
     {
         $newAssessmentTool = [];
+//        $loList = ClassAssessment::distinct()->where(['class_id'=>$classId])->get('learning_outcome_id');
+        $loList = ClassAssessment::distinct()
+            ->where(['class_id'=>55])
+            ->get('learning_outcome_id')
+            ->pluck('learning_outcome_id')
+            ->toArray();
+
+
         foreach($loList as $lo) {
-            $ast = AssessmentTool::where([
-                ['course_id', '=', $classId],
-                ['loutcome_id', '=', $lo->id],
+
+            $ast = ClassAssessment::where([
+                ['class_id', '=', $classId],
+                ['learning_outcome_id', '=', $lo],
                 ['assessment_id', '<>', 10],
             ])->get();
+//            dump($ast);
 
             $assessments =[];
             foreach($ast as $as)
-                $assessments[$as->assessment_id] = $as->percentage;
+                $assessments[$as->assessment_id] = $as->precentage;
 
-            $newAssessmentTool[$lo->id] = $assessments;
+            $newAssessmentTool[$lo] = $assessments;
         }
+//        dump($newAssessmentTool);
+
         return $newAssessmentTool;
     }
 }

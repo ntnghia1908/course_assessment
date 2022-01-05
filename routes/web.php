@@ -45,10 +45,16 @@ Route::prefix('admin')->group(function () {
     Route::post('/class/edit', 'Admin\ClassController@editClass')->name('admin_edit_class');
     Route::post('/class/add', 'Admin\ClassController@addClass')->name('admin_add_class');
 
-    Route::post('/result/upload/{id}', 'Admin\ResultController@uploadResult')->name('admin_result_upload');
-    Route::post('/result/uploadScore/{id}', 'Admin\ResultController@uploadResultScore')->name('admin_result_upload_score');
-    Route::post('/result/student/{id}', 'Admin\ResultController@resultStudent')->name('admin_result_student');
-    Route::get('/result/student/{classId}/{studentId}', 'Admin\ResultController@getResultStudent')->name('admin_get_result_detailForStudent');
+    Route::post('/result/upload/{class_id}', 'Admin\ResultController@uploadResult')->name('admin_result_upload');
+    Route::post('/result/uploadScore/{class_id}', 'Admin\ResultController@uploadResultScore')->name('admin_result_upload_score');
+//    Route::post('/result/student/{id}', 'Admin\ResultController@resultStudent')->name('admin_result_student');
+    Route::get('/result/detailForStudent/{class_id}/{student_id}', 'Admin\ResultController@showDetailResultOfStudentInSpecificClass')->name('admin_get_result_detailForStudent');
+    Route::post('/result/deleteStudentInClass/{class_id}/{student_id}', 'Admin\ResultController@deleteStudentFromClass')->name('admin_delete_student_from_class');
+    Route::get('/result/assignCourse/{class_id}/{student_id}', 'Admin\ResultController@assignCourseForStudent')->name('admin_assign_course_for_student');
+    Route::post('/result/upload/{class_id}', 'Admin\ResultController@saveStudentListForClass')->name('admin_save_student_list_for_class');
+//    Route::post('/result/uploadScore/{class_id}', 'Admin\ResultController@saveStudentScoreForClass')->name('save_student_score_for_class');
+
+    Route::get('/student/{student_id}', 'Admin\ResultController@getStudentDetail')->name('admin_get_student_detail');
 
     Route::get('/assessment/edit_assessment_tool/{classId}', 'Admin\AssessmentController@getEditAssessmentTool')->name('admin_get_edit_assessmentTool');
     Route::get('/assessment/edit_course_assessment/{classId}', 'Admin\AssessmentController@getEditCourseAssessment')->name('admin_get_edit_courseAssessment');

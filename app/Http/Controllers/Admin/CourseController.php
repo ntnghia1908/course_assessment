@@ -26,9 +26,7 @@ class CourseController extends Controller
 
     function getCourseDetail($id) {
         $courseAssessment= CourseAssessment::where([ ['course_id', '=', $id], ['assessment_id', '<>', 10] ])->get();
-//        $course = Course::find($id);
         $course = Course::with('classSessions')->find($id);
-//        $classSessionList = $course->classSessionList;
         $loList = $course->learningOutcomes;
         $classSessions = ClassSession::with('instructor')->where(['course_id' => $id]);
 

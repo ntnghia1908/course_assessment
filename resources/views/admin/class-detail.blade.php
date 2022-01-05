@@ -73,19 +73,20 @@
                             <div class="about-me-profile mt-4">
                                 <div class="card">
                                     <div class="page-title">
-                                        <h4>Upload student in classes</h4>
+{{--                                        <h4>Upload student in classes</h4>--}}
                                     </div>
-                                    <div class="card-body">
-                                        <form action= "{{ route('admin_result_upload', ['id'=>$class->id]) }}"
-                                              enctype="multipart/form-data" method="post">
-                                            <input type="file" name="student_file" required class="form-control2">
-                                            <br>
-                                            <div class="form-group custom-mt-form-group">
-                                                <button class="btn btn-primary mr-2" type="submit">Import students
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
+{{--                                    <div class="card-body">--}}
+{{--                                        <form action= "{{ route('admin_result_upload', ['id'=>$class->id]) }}"--}}
+{{--                                              enctype="multipart/form-data" method="post">--}}
+{{--                                            @csrf--}}
+{{--                                            <input type="file" name="student_file" required class="form-control2">--}}
+{{--                                            <br>--}}
+{{--                                            <div class="form-group custom-mt-form-group">--}}
+{{--                                                <button class="btn btn-primary mr-2" type="submit">Import students--}}
+{{--                                                </button>--}}
+{{--                                            </div>--}}
+{{--                                        </form>--}}
+{{--                                    </div>--}}
                                 </div>
                                 <div class="card">
                                     <div class="page-title">
@@ -115,9 +116,10 @@
                                         <h4>Upload student results</h4>
                                     </div>
                                     <div class="card-body">
-                                        <form action="{{route('admin_result_upload_score', ['id'=>$class->id]) }}"
+                                        <form action="{{route('admin_result_upload_score', ['class_id'=>$class->id]) }}"
                                               enctype="multipart/form-data" method="post">
-                                            <input type="file" name="score_file" required class="form-control2">
+                                            @csrf
+                                            <input  type="file" name="score_file" required class="form-control2">
                                             <br>
                                             <div class="form-group custom-mt-form-group">
                                                 <button class="btn btn-primary mr-2" type="submit">Import student
@@ -167,6 +169,40 @@
                             <div class="profile-content">
                                 <div class="row">
                                     <div class="col-lg-12">
+                                    <div class="card">
+                                        <!-- Nav tabs -->
+                                        <ul class="nav customtab">
+                                            <li class="nav-item"><a href="#" class="nav-link active show">Class Result Summary</a></li>
+                                        </ul>
+                                        <!-- Tab panes -->
+                                        <div class="tab-content">
+                                            <div class="tab-pane active show">
+                                                <div id="biography" class="biography">
+                                                    <table class="table table-striped custom-table" id="datatable">
+                                                        <thead>
+                                                        <tr>
+                                                            <th style="min-width:50px;">ABET criteria</th>
+                                                            <th style="min-width:50px;">Average score</th>
+                                                            <th style="min-width:50px;"> % Pass</th>
+
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        @foreach($resultSummary as $result)
+                                                        <tr>
+                                                            <td> {{ $result[0] }}</td>
+                                                            <td> {{ $result[2] }}%</td>
+                                                            <td> {{ $result[1] }}%</td>
+                                                        </tr>
+                                                        @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                         <div class="card">
                                             <!-- Nav tabs -->
                                             <ul class="nav customtab">
@@ -196,27 +232,27 @@
                                                             @foreach($resultList as $result)
                                                             <tr>
                                                                 <td>
-                                                                <a href="{{ route('admin_get_result_detailForStudent'),
-                                                                    ['id'=>$result->student->id] }}">
-                                                                    {{$result->student->id}}
+                                                                <a href="{{ route('admin_get_result_detailForStudent',
+                                                                    ['class_id'=>$result->class_id, 'student_id'=>$result->student_id]) }}">
+                                                                    {{$result->student_id}}
                                                                 </a>
                                                                 </td>
                                                                 <td>{{ $result->student->name }}</td>
                                                                 <td>{{ $result->in_class_score }}</td>
                                                                 <td>{{ $result->mid_score }}</td>
                                                                 <td>{{ $result->final_score }}</td>
-                                                                <td>{{ $result->gpa }}</td>
+                                                                <td>{{ $result->GPA }}</td>
                                                                 <td>{{ $result->abet_score }}</td>
                                                                 <td class="text-right">
                                                                     <a class="btn btn-primary btn-sm mb-1"
                                                                         href= {{ route('admin_get_result_detailForStudent',
-                                                                        ['classId'=>$cl->id, 'studentId'=>$result->studentId]) }}>
+                                                                        ['class_id'=>$result->class_id, 'student_id'=>$result->student_id]) }}>
                                                                         <i class="fa fa-eye" aria-hidden="true"></i>
                                                                     </a>&nbsp;&nbsp;&nbsp;
                                                                     <a
                                                                     class="btn btn-danger btn-sm mb-1 btn-delete"
-                                                                    href={{route('admin_delete_deleteStudentInClass',
-                                                                    ['classId'=>$cl->id, 'studentId'=>$result->studentId]) }}>
+                                                                    href={{route('admin_delete_student_from_class',
+                                                                    ['class_id'=>$result->class_id, 'student_id'=>$result->student_id]) }}>
                                                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                                                     </a>&nbsp;&nbsp;&nbsp;
                                                                 </td>
@@ -300,9 +336,9 @@
                                                                 <tr id="{{ $lo->id }} ">
                                                                     <td>{{ $lo->description }}</td>
                                                                     @foreach($courseAssessment as $ca)
-                                                                        @if( isset($newAssessmentTool[$lo->id][$ca->assessment_id]) )
+                                                                        @if( isset($classAssessmentTool[$lo->id][$ca->assessment_id]) )
                                                                             <td id="{{ $ca->id }}">
-                                                                                {{$newAssessmentTool[$lo->id][$ca->assessment_id]}}
+                                                                                <b>{{$classAssessmentTool[$lo->id][$ca->assessment_id]}}</b>
                                                                             </td>
                                                                         @else
                                                                             <td>0.0</td>
@@ -347,7 +383,7 @@
                                                                         @if( isset($abetMapping[$lo->id][$i]) )
                                                                             <td>{{ $abetMapping[$lo->id][$i] }}</td>
                                                                         @else
-                                                                            <td>0.0</td>
+                                                                            <td></td>
                                                                         @endif
                                                                     @endfor
                                                                 </tr>

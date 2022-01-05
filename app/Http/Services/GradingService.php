@@ -4,6 +4,11 @@ namespace App\Http\Services;
 
 //use Illuminate\Database\Eloquent\Model;
 
+//use DebugBar;
+//use DebugBar\DebugBar;
+
+use DebugBar;
+
 class GradingService {
 
     // CALCULATE THE GPA OF LIST OF STUDENTS//
@@ -29,6 +34,7 @@ class GradingService {
                 + $final_weight * $student->final_score) * 0.01);
 
         $student->gpa = round($gpa);
+//        dump($student->toArray());
 
         return $student;
     }
@@ -48,38 +54,48 @@ class GradingService {
     static function convertAssessmentToolTable($assessmentToolList, $courseAssessmentList): array
     {
         $course_ass_list = self::convertAssessmentCourseToHashTable( $courseAssessmentList);
+//        dump($course_ass_list);
+//        dump($assessmentToolList);
         $convert_assignment_at = [];
 
         foreach($assessmentToolList as $cat) {
+//            dump($cat);
             $new_inclass = 0.0;
             $new_midterm = 0.0;
             $new_final = 0.0;
             $item = [];
 
             foreach($assessmentToolList as $at) {
-                if($cat->lout_id == $at->lout_id) {
-                    if($at->assessment_id != 4 && $at->assessmentId != 6)
-                        $new_inclass += $at->percentage * self::getNumberFromDict($course_ass_list, $at->assessment_id);
+                if($cat->learning_outcome_id == $at->learning_outcome_id) {
+                    if($at->assessment_id != 4 && $at->assessment_id != 6) {
+//                        dump($at);
+                        $new_inclass += $at->precentage * self::getNumberFromDict($course_ass_list, $at->assessment_id);
+                    }
                     else {
-                        if($at->assessment_id == 4)
-                            $new_midterm = $at->percentage * self::getNumberFromDict($course_ass_list, 4);
+                        if($at->assessment_id == 4) {
+                            $new_midterm = $at->precentage * self::getNumberFromDict($course_ass_list, 4);
+                        }
                         else
-                            $new_final = $at->percentage * self::getNumberFromDict($course_ass_list, 6);
+                            $new_final = $at->precentage * self::getNumberFromDict($course_ass_list, 6);
                     }
                 }
             }
+//           dump($new_final);
+//            dump($cat->learning_outcome_id);
             $item[10] = $new_inclass / ($new_inclass + $new_midterm + $new_final);
             $item[4] = $new_midterm / ($new_inclass + $new_midterm + $new_final);
             $item[6] = $new_final / ($new_inclass + $new_midterm + $new_final);
-            $convert_assignment_at[$cat->lout_id] = $item;
+            $convert_assignment_at[$cat->learning_outcome_id] = $item;
         }
         return $convert_assignment_at;
     }
 
     static function calculateLearningOutcomeScore($assessment_tools, $course_assessment, $studentResult): array
     {
+//        dump($assessment_tools);
         $list_LO_scores = [];
         $convert_assignment_at =  self::convertAssessmentToolTable($assessment_tools, $course_assessment);
+//        dump($convert_assignment_at);
         $list_loId = array_keys($convert_assignment_at);
 
         foreach ($list_loId as $learningOutcomeID) {
@@ -91,6 +107,7 @@ class GradingService {
 
             $list_LO_scores[$learningOutcomeID] = $score;
         }
+//        dd($convert_assignment_at, $list_loId, $list_LO_scores);
         return $list_LO_scores;
     }
 
@@ -103,6 +120,8 @@ class GradingService {
 
         foreach ($abetMapping as $cloSlo) {
             $total_weight = 0.0;
+//            DebugBar::info($total_weight);
+
             foreach ($abetMapping as $item) {
                 if($cloSlo->slo_id == $item->slo_id)
                     $total_weight += $item->percentage;
@@ -112,10 +131,14 @@ class GradingService {
 
         foreach ($abetMapping as $cloSlo) {
             $newAbetMapping = [];
+
             foreach ($abetMapping as $item) {
-                if ($item->slo_id == $cloSlo->slo_id)
-                    $newAbetMapping[$item->slo_id] = (float)$item->percentage / $sumPercentageOfEachCriteria[$cloSlo->slo_id];
+                if ($item->slo_id == $cloSlo->slo_id) {
+                    $newAbetMapping[$item->clo_id] = (float)$item->percentage / $sumPercentageOfEachCriteria[$cloSlo->slo_id];
+//                    dd($item->percentage, $sumPercentageOfEachCriteria);
+                }
             }
+
             $abetMappingAfterConvert[$cloSlo->slo_id] = $newAbetMapping;
         }
         return$abetMappingAfterConvert;
@@ -153,23 +176,26 @@ class GradingService {
     static function getNumberFromDict($dict, $key): float
     {
         $result = 0.0;
-        if ($dict!=null)
+        if ($dict[$key] !=null)
             $result = (float) $dict[$key];
         return $result;
     }
 
     static function calculateAbetScoreOfStudent($assessmentToolList,$courseAssessmentList,$student,$cloSlo) {
+
         $learningOutcomeScore = self::calculateLearningOutcomeScore($assessmentToolList, $courseAssessmentList, $student);
         $newAbetMapping = self::transferAndConvertAbetMapping($cloSlo);
 
         $abetScore = [];
         $abetCriteria = array_keys($newAbetMapping);
+        $numCriteria = count($abetCriteria);
         $totalScore = 0.0;
 
         foreach ($abetCriteria as $criteria) {
             $score = 0.0;
             $abetPercentage = $newAbetMapping[$criteria];
             $learningOutcomeId = array_keys($abetPercentage);
+
 
             foreach ($learningOutcomeId as $lo_id)
                 $score += $abetPercentage[$lo_id] * $learningOutcomeScore[$lo_id];
@@ -179,7 +205,7 @@ class GradingService {
         }
 
         self::storeStudentAbetResult($student, $abetScore);
-        $student->abet_score = round( ($totalScore / count($abetCriteria)) );
+        $student->abet_score = round( ($totalScore / $numCriteria) );
         return $student;
     }
 }
