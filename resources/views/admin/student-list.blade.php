@@ -44,27 +44,29 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="student : ${studentList}">
-                            <td th:text="${student.id}">ID</td>
-                            <td th:text="${student.name}">Name</td>
-                            <td th:text="${student.major}">Major</td>
-                            <td th:text="${student.batch}">Batch</td>
+                        @foreach($students as $student)
+                        <tr>
+                            <td>{{$student->id}}</td>
+                            <td>{{ $student->name }}</td>
+                            <td>{{ $student->major }}</td>
+                            <td>{{ $student->batch }}</td>
 
                             <td class="text-right">
-                                <a th:href="@{'assignCourse/'+ ${student.id}}" class="btn btn-primary btn-sm mb-1">
-                                    <i class="fa fa-plus-square" aria-hidden="true"></i>
-                                </a>&nbsp;&nbsp;&nbsp;
-                                <a th:href="@{'view/'+ ${student.id}}" class="btn btn-primary btn-sm mb-1">
+{{--                                <a th:href="@{'assignCourse/'+ ${student.id}}" class="btn btn-primary btn-sm mb-1">--}}
+{{--                                    <i class="fa fa-plus-square" aria-hidden="true"></i>--}}
+{{--                                </a>&nbsp;&nbsp;&nbsp;--}}
+                                <a href="{{ route('admin_get_student_detail', ['student_id'=>$student->id]) }}" class="btn btn-primary btn-sm mb-1">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </a>&nbsp;&nbsp;&nbsp;
-                                <a th:href="@{'edit/' + ${student.id}}" class="btn btn-primary btn-sm mb-1">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                                </a>&nbsp;&nbsp;&nbsp;
-                                <a th:href="@{'delete/' + ${student.id}}" class="btn btn-danger btn-sm mb-1 btn-delete">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
+{{--                                <a th:href="@{'edit/' + ${student.id}}" class="btn btn-primary btn-sm mb-1">--}}
+{{--                                    <i class="fa fa-pencil" aria-hidden="true"></i>--}}
+{{--                                </a>&nbsp;&nbsp;&nbsp;--}}
+{{--                                <a th:href="@{'delete/' + ${student.id}}" class="btn btn-danger btn-sm mb-1 btn-delete">--}}
+{{--                                    <i class="fa fa-trash" aria-hidden="true"></i>--}}
                                 </a>
                             </td>
                         </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>

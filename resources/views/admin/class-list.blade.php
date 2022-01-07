@@ -63,7 +63,7 @@
                             <tr>
                                 <td>{{ $cl->Instructor->name }}</td>
                                 <td>{{ $cl->course->name }} </td>
-                                <td>{{ $cl->group}}</td>
+                                <td>{{ $cl->group_theory}}</td>
                                 <td>{{ $cl->semester }}</td>
                                 <td>{{ $cl->academic_year }}</td>
                                 <td class="text-right" >

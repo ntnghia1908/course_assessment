@@ -47,18 +47,19 @@ Route::prefix('admin')->group(function () {
 
     Route::post('/result/upload/{class_id}', 'Admin\ResultController@uploadResult')->name('admin_result_upload');
     Route::post('/result/uploadScore/{class_id}', 'Admin\ResultController@uploadResultScore')->name('admin_result_upload_score');
-//    Route::post('/result/student/{id}', 'Admin\ResultController@resultStudent')->name('admin_result_student');
     Route::get('/result/detailForStudent/{class_id}/{student_id}', 'Admin\ResultController@showDetailResultOfStudentInSpecificClass')->name('admin_get_result_detailForStudent');
     Route::post('/result/deleteStudentInClass/{class_id}/{student_id}', 'Admin\ResultController@deleteStudentFromClass')->name('admin_delete_student_from_class');
     Route::get('/result/assignCourse/{class_id}/{student_id}', 'Admin\ResultController@assignCourseForStudent')->name('admin_assign_course_for_student');
     Route::post('/result/upload/{class_id}', 'Admin\ResultController@saveStudentListForClass')->name('admin_save_student_list_for_class');
-//    Route::post('/result/uploadScore/{class_id}', 'Admin\ResultController@saveStudentScoreForClass')->name('save_student_score_for_class');
 
-    Route::get('/student/{student_id}', 'Admin\ResultController@getStudentDetail')->name('admin_get_student_detail');
+    Route::get('/student/create', 'Admin\StudentController@getAddStudent')->name('admin_get_add_student_page');
+    Route::post('/student/add', 'Admin\StudentController@addStudent')->name('admin_add_student');
+    Route::get('/students', 'Admin\StudentController@getStudents')->name('admin_get_students');
+    Route::get('/student/delete/{student_id}', 'Admin\StudentController@getStudentDelele')->name('admin_delete_student');
+    Route::get('/student/{student_id}', 'Admin\StudentController@getStudentDetail')->name('admin_get_student_detail');
 
-    Route::get('/assessment/edit_assessment_tool/{classId}', 'Admin\AssessmentController@getEditAssessmentTool')->name('admin_get_edit_assessmentTool');
-    Route::get('/assessment/edit_course_assessment/{classId}', 'Admin\AssessmentController@getEditCourseAssessment')->name('admin_get_edit_courseAssessment');
-    Route::get('/assessment/edit_abet_mapping_assessment/{classId}', 'Admin\AssessmentController@getEditAbetMapping')->name('admin_get_edit_abetMapping');
-    Route::post('/assessment/edit', 'Admin\AssessmentController@editAssessmentTool')->name('admin_edit_assessmentTool');
-
+    Route::get('/assessment/edit_assessment_tool/{classId}', 'Admin\AssessmentToolController@getEditAssessmentTool')->name('admin_get_edit_assessmentTool');
+    Route::get('/assessment/edit_course_assessment/{classId}', 'Admin\AssessmentToolController@getEditCourseAssessment')->name('admin_get_edit_courseAssessment');
+    Route::get('/assessment/edit_abet_mapping_assessment/{classId}', 'Admin\AssessmentToolController@getEditAbetMapping')->name('admin_get_edit_abetMapping');
+    Route::post('/assessment/edit', 'Admin\AssessmentToolController@updateAssessmentTool')->name('admin_edit_assessmentTool');
 });

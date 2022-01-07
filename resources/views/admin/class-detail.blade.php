@@ -191,7 +191,7 @@
                                                         @foreach($resultSummary as $result)
                                                         <tr>
                                                             <td> {{ $result[0] }}</td>
-                                                            <td> {{ $result[2] }}%</td>
+                                                            <td> {{ $result[2] }}</td>
                                                             <td> {{ $result[1] }}%</td>
                                                         </tr>
                                                         @endforeach
@@ -317,9 +317,8 @@
                                             <!-- Tab panes -->
                                             <div class="tab-content">
                                                 <div class="tab-pane active show">
-                                                    <div id="assessment-tool" class="biography">
-                                                        <table class="table table-striped custom-table"
-                                                               id="datatable">
+                                                    <div class="biography">
+                                                        <table class="table table-striped custom-table">
                                                             <thead>
                                                             <tr>
                                                                 <th style="min-width:50px;">Description</th>
@@ -331,20 +330,21 @@
                                                             </tr>
                                                             </thead>
 
-                                                            <tbody>
+                                                            <tbody id="assessment-tool">
                                                             @foreach($loList as $lo)
                                                                 <tr id="{{ $lo->id }} ">
                                                                     <td>{{ $lo->description }}</td>
                                                                     @foreach($courseAssessment as $ca)
                                                                         @if( isset($classAssessmentTool[$lo->id][$ca->assessment_id]) )
-                                                                            <td id="{{ $ca->id }}">
+                                                                            <td id="cell-{{ $lo->id }}-{{ $ca->assessment_id }}">
                                                                                 <b>{{$classAssessmentTool[$lo->id][$ca->assessment_id]}}</b>
                                                                             </td>
                                                                         @else
-                                                                            <td>0.0</td>
+                                                                            <td id="cell-{{ $lo->id }}-{{ $ca->assessment_id }}">0.0</td>
                                                                         @endif
                                                                     @endforeach
                                                                 </tr>
+{{--                                                                <tr id="flag"> </tr>--}}
                                                             @endforeach
                                                             </tbody>
                                                         </table>
@@ -405,5 +405,37 @@
         </div>
     </div>
 </div>
+@stop
+@section('javascript')
+<script>
+    const elements = document.querySelectorAll("#assessment-tool td[id^='cell']");
+    var assessments = {};
+    elements.forEach ( element => {
+        cloId= element.id.split('-')[1]; // row
+        sloId= element.id.split('-')[2]; // col
+
+        if(sloId in assessments)
+            assessments[sloId][cloId] = parseInt(element.innerText);
+        else {
+            assessments[sloId] = {};
+            assessments[sloId][cloId] = parseInt(element.innerText) ;
+        }
+    });
+
+    const assessmentToolTable = document.querySelector("#assessment-tool");
+    const row = document.createElement('tr');
+    let tdTap = `<td>total</td>`
+    for( let slo_id in assessments) {
+        let sumCol = 0;
+        for (let clo_id in assessments[slo_id] ) {
+            sumCol += assessments[slo_id][clo_id];
+        }
+        assessments[slo_id]['sum'] = sumCol;
+        tdTap += `<td>${sumCol}</td>`
+    }
+
+    row.innerHTML = tdTap;
+    assessmentToolTable.appendChild(row)
+</script>
 @stop
 

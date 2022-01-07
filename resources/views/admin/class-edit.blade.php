@@ -60,21 +60,25 @@
                                         </div>
 
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                                @if(!isset($classSession))
                                             <div class="form-group custom-mt-form-group">
-                                                <select id="course_name" name="course_id">
+                                                <select id="course_id" name="course_id">
                                                     @foreach($courseList as $course)
                                                         <option value="{{$course->id}}">{{ $course->name }}</option>
                                                     @endforeach
-                                                        <label for="course_name" class="control-label">Course Name</label>
+                                                        <label for="course_id" class="control-label">Course Name</label>
                                                 </select>
                                                 <label class="control-label">Course<span
                                                         class="text-red">*</span></label><i
                                                     class="bar"></i>
                                             </div>
+                                            @endif
                                             <div class="form-group custom-mt-form-group">
                                                 <select id="instructor_name" name="instructor_name">
                                                     @foreach($instructorList as $instructor)
-                                                    <option value="{{ $instructor->id }}">{{ $instructor->name }}</option>
+                                                    <option value="{{isset($classSession) ? $classSession->instructor_id : $instructor->id }}">
+                                                        {{isset($classSession) ? $classSession->instructor->name : $instructor->name }}
+                                                    </option>
                                                     @endforeach
                                                     <label for="instructor_name" class="control-label">instructor Name</label>
                                                 </select>
@@ -116,143 +120,6 @@
                                     </div>
                                 </div>
                             </form>
-{{--                        <div th:unless="${classSession.id} !=null">--}}
-{{--                            <form method="post" th:action="@{/classSession/save}"--}}
-{{--                                  th:object="${classSession}"--}}
-{{--                                  enctype="multipart/form-data">--}}
-{{--                                <div class="card-body">--}}
-{{--                                    <div class="row">--}}
-{{--                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">--}}
-{{--                                            <div class="form-group custom-mt-form-group">--}}
-{{--                                                <select id="course_name" th:field="*{course.id}">--}}
-{{--                                                    <option th:each="course : ${courseList}"--}}
-{{--                                                            th:value="${course.id}"--}}
-{{--                                                            th:utext="${course.name}"/>--}}
-{{--                                                </select>--}}
-{{--                                                <label class="control-label">Course<span--}}
-{{--                                                        class="text-red">*</span></label><i--}}
-{{--                                                    class="bar"></i>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="form-group custom-mt-form-group">--}}
-{{--                                                <select id="instructor_name" th:field="*{instructorId}">--}}
-{{--                                                    <option th:each="instructor : ${instructorList}"--}}
-{{--                                                            th:value="${instructor.id}"--}}
-{{--                                                            th:utext="${instructor.name}"/>--}}
-{{--                                                </select>--}}
-{{--                                                <label class="control-label">Instructor<span--}}
-{{--                                                        class="text-red">*</span></label><i class="bar"></i>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="form-group custom-mt-form-group">--}}
-{{--                                                <input type="number" th:field="*{groupTheory}" required/>--}}
-{{--                                                <label class="control-label">Group Theory <span--}}
-{{--                                                        class="text-red">*</span></label><i class="bar"></i>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">--}}
-{{--                                            <div class="form-group custom-mt-form-group">--}}
-{{--                                                <select id="semester" th:field="*{semester}">--}}
-{{--                                                    <option value="1">1</option>--}}
-{{--                                                    <option value="2">2</option>--}}
-{{--                                                    <option value="3">3</option>--}}
-{{--                                                </select>--}}
-{{--                                                <label class="control-label">Semester <span--}}
-{{--                                                        class="text-red">*</span></label><i--}}
-{{--                                                    class="bar"></i>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="form-group custom-mt-form-group">--}}
-{{--                                                <input type="text" th:field="*{academicYear}" required/>--}}
-{{--                                                <label class="control-label">Academic Yer (Format example:--}}
-{{--                                                    2020-2021)<span--}}
-{{--                                                        class="text-red">*</span></label><i class="bar"></i>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">--}}
-{{--                                            <div class="form-group text-center custom-mt-form-group">--}}
-{{--                                                <button class="btn btn-primary mr-2" type="submit">Submit</button>--}}
-{{--                                                <button class="btn btn-secondary" type="reset">Cancel</button>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </form>--}}
-{{--                            <div class="page-content">--}}
-{{--                                <div class="row">--}}
-{{--                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">--}}
-{{--                                        <div class="card">--}}
-{{--                                            <div class="page-title">--}}
-{{--                                                <div class="row">--}}
-{{--                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">--}}
-{{--                                                        <div class="page-title">Import file</div>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                            <form th:action="@{/classSession/saveAuto}" enctype="multipart/form-data"--}}
-{{--                                                  method="post">--}}
-{{--                                                <div class="card-body">--}}
-{{--                                                    <div class="row">--}}
-{{--                                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">--}}
-{{--                                                            <div class="form-group custom-mt-form-group">--}}
-{{--                                                                <input type="file" name="file" required--}}
-{{--                                                                       class="form-control-file">--}}
-{{--                                                            </div>--}}
-{{--                                                            <div class="form-group custom-mt-form-group">--}}
-{{--                                                                <button class="btn btn-primary mr-2" type="submit">--}}
-{{--                                                                    Import classes--}}
-{{--                                                                </button>--}}
-{{--                                                            </div>--}}
-{{--                                                        </div>--}}
-
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                            </form>--}}
-{{--                                            <div class="card-body">--}}
-{{--                                                <div class="row">--}}
-{{--                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">--}}
-{{--                                                        <div class="form-group custom-mt-form-group">--}}
-{{--                                                            <h4 class="card-title">File format</h4><br>--}}
-{{--                                                            <table class="table table-hover m-b-0">--}}
-{{--                                                                <thead>--}}
-{{--                                                                <tr>--}}
-{{--                                                                    <th>Fields</th>--}}
-{{--                                                                    <th>Example</th>--}}
-{{--                                                                </tr>--}}
-{{--                                                                </thead>--}}
-{{--                                                                <tbody>--}}
-{{--                                                                <tr>--}}
-{{--                                                                    <td>Instructor name <span class="text-red">*</span>--}}
-{{--                                                                    </td>--}}
-{{--                                                                    <td>Nguyễn Thị A</td>--}}
-{{--                                                                </tr>--}}
-{{--                                                                <tr>--}}
-{{--                                                                    <td>Course ID<span class="text-red">*</span></td>--}}
-{{--                                                                    <td>IT132IU</td>--}}
-{{--                                                                </tr>--}}
-{{--                                                                <tr>--}}
-{{--                                                                    <td>Group (theory)<span class="text-red">*</span>--}}
-{{--                                                                    </td>--}}
-{{--                                                                    <td>1</td>--}}
-{{--                                                                </tr>--}}
-{{--                                                                <tr>--}}
-{{--                                                                    <td>Semester<span class="text-red">*</span></td>--}}
-{{--                                                                    <td>3</td>--}}
-{{--                                                                </tr>--}}
-{{--                                                                <tr>--}}
-{{--                                                                    <td>Academic year<span class="text-red">*</span>--}}
-{{--                                                                    </td>--}}
-{{--                                                                    <td>2020-2021 (no space between each year)</td>--}}
-{{--                                                                </tr>--}}
-{{--                                                                </tbody>--}}
-{{--                                                            </table>--}}
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
-
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
                     </div>
                 </div>
             </div>

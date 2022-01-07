@@ -28,7 +28,7 @@ class CourseController extends Controller
         $courseAssessment= CourseAssessment::where([ ['course_id', '=', $id], ['assessment_id', '<>', 10] ])->get();
         $course = Course::with('classSessions')->find($id);
         $loList = $course->learningOutcomes;
-        $classSessions = ClassSession::with('instructor')->where(['course_id' => $id]);
+        $classSessions = ClassSession::with('instructor')->where(['course_id' => $id])->get();
 
         $newAssessmentTool= AssessmentTool::getByCourseAssessmentAndLO($id, $loList);
         $abetMapping = CloSlo::getAbetMapping($loList);
