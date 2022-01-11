@@ -61,7 +61,7 @@
                         <tbody>
                         @foreach ( $classes as $cl )
                             <tr>
-                                <td>{{ $cl->Instructor->name }}</td>
+                                <td>{{ $cl->instructor->name }}</td>
                                 <td>{{ $cl->course->name }} </td>
                                 <td>{{ $cl->group_theory}}</td>
                                 <td>{{ $cl->semester }}</td>

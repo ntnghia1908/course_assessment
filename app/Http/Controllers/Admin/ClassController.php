@@ -25,7 +25,7 @@ class ClassController extends Controller
     }
 
     function getClass() {
-        $classes = ClassSession::all();
+        $classes = ClassSession::with('instructor', 'course')->get();
         return view('admin.class-list', compact('classes'));
     }
 

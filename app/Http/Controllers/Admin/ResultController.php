@@ -53,6 +53,12 @@ class ResultController extends Controller
         $classAssessmentTools = ClassAssessment::where(['class_id' => $class_id])->get();
         $classSloClos = ClassSloClo::where(['class_id'=>$class_id])->get();
 
+
+        $resultDB = Result::where(['class_id'=>$class_id]);
+        dump($resultDB);
+        if(isset($resultDB))
+            $resultDB->delete();
+
         foreach ($resultList as $result) {
             $result->class_id = $class_id;
 //            $result->classSession = ClassSession::find($class_id);
