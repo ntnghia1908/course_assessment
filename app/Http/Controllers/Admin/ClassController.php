@@ -54,7 +54,6 @@ class ClassController extends Controller
     }
 
 
-
     function getEditClass($classId) {
         $classSession = ClassSession::find($classId);
         $courseList = Course::all();

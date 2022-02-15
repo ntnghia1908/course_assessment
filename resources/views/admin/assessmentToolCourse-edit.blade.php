@@ -39,19 +39,19 @@
                                         <div class="card-body">
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item"><b>Course Title</b>
-                                                    <a href="{{ route('admin_get_course_detail', [ 'id' => $class->course->id]) }}"
+                                                    <a href="{{ route('admin_get_course_detail', [ 'id' => $course->id]) }}"
                                                        class="float-right">
-                                                        {{ $class->course->id }} - {{ $class->course->name }}
+                                                        {{ $course->id }} - {{ $course->name }}
                                                     </a>
                                                 </li>
                                                 <li class="list-group-item"><b>Course Level</b>
                                                     <a href="#" class="float-right">
-                                                        {{ $class->course->courseLevel->level }}
+                                                        {{ $course->courseLevel->level }}
                                                     </a>
                                                 </li>
                                                 <li class="list-group-item"><b>Credit</b>
                                                     <a href="#" class="float-right">
-                                                        {{ $class->course->credit_theory }} (theory) {{ $class->course->credit_lab }} (lab)
+                                                        {{ $course->credit_theory }} (theory) {{ $course->credit_lab }} (lab)
                                                     </a>
                                                 </li>
 {{--                                                <li class="list-group-item"><b>Instructor </b>--}}
@@ -59,14 +59,14 @@
 {{--                                                        class="float-right">{{ $class->instructor->name }}--}}
 {{--                                                    </a>--}}
 {{--                                                </li>--}}
-                                                <li class="list-group-item"><b>Group</b>
-                                                    <a href="#" class="float-right"> {{ $class->group_theory }} </a>
-                                                </li>
-                                                <li class="list-group-item"><b>Semester - Academic Year</b>
-                                                    <a href="#" class="float-right">
-                                                        {{ $class->semester }} - {{ $class->academic_year }}
-                                                    </a>
-                                                </li>
+{{--                                                <li class="list-group-item"><b>Group</b>--}}
+{{--                                                    <a href="#" class="float-right"> {{ $class->group_theory }} </a>--}}
+{{--                                                </li>--}}
+{{--                                                <li class="list-group-item"><b>Semester - Academic Year</b>--}}
+{{--                                                    <a href="#" class="float-right">--}}
+{{--                                                        {{ $class->semester }} - {{ $class->academic_year }}--}}
+{{--                                                    </a>--}}
+{{--                                                </li>--}}
                                             </ul>
                                         </div>
                                     </div>
@@ -95,20 +95,12 @@
                                                         <li class="nav-item"><a href="#" class="nav-link active show">
                                                                 AssessmentTools</a>
                                                         </li>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link active show"
-                                                               href={{route('admin_get_edit_assessmentTool', ['classId'=>$class->id])}}>
-                                                                Edit Assessment Tool
-                                                            </a>
-                                                        </li>
                                                     </ul>
 
                                                     <!-- Tab panes -->
                                                     <div class="tab-content">
                                                         <div class="tab-pane active show">
                                                             <div class="biography">
-
-
                                                                 <table class="table table-striped custom-table"
                                                                        id="datatable">
                                                                     <thead>
@@ -122,17 +114,16 @@
                                                                     </tr>
                                                                     </thead>
 
-
                                                                     <tbody id="assessment-tool">
                                                                     @foreach($loList as $lo)
                                                                         <tr id="{{ $lo->id }} ">
                                                                             <td>{{ $lo->description }}</td>
                                                                             @foreach($courseAssessment as $ca)
-                                                                                @if( isset($classAssessmentTool[$lo->id][$ca->assessment_id]) )
+                                                                                @if( isset($courseAssessmentTool[$lo->id][$ca->assessment_id]) )
                                                                                     <form>
                                                                                     <td>
                                                                                         <input id="cell-{{ $lo->id }}-{{$ca->assessment_id}}"
-                                                                                               type="number" max="100" min="0" value="{{$classAssessmentTool[$lo->id][$ca->assessment_id]}}" />
+                                                                                               type="number" max="100" min="0" value="{{$courseAssessmentTool[$lo->id][$ca->assessment_id]}}" />
                                                                                     </td>
                                                                                 @else
                                                                                     <td>
@@ -163,9 +154,7 @@
 @stop
 @section('javascript')
     <script>
-
         const elements = document.querySelectorAll("#assessment-tool input[id^='cell']");
-
         elements.forEach( element => element.addEventListener('input', () => {
             // const elements = document.querySelectorAll("#assessment-tool input[id^='cell']");
             let assessments = getAssessment(elements)
@@ -211,9 +200,9 @@
             var assessments = getAssessment(elements)
             console.log(assessments)
             $.ajax({
-                url: '/admin/assessment/edit',
+                url: '/admin/assessmentToolCourse/edit',
                 type: 'POST',
-                data: {"assessmentTool": assessments, "_token": "{{ csrf_token() }}", "class_id": {{ $class->id }}  },
+                data: {"assessmentTool": assessments, "_token": "{{ csrf_token() }}", "course_id": "{{ $course->id }}"  },
                 dataType: 'json',
                 success: function(res){
                     alert(res['message'])

@@ -65,7 +65,7 @@ class ClassAssessmentTool extends Model
         $newAssessmentTool = [];
 //        $loList = ClassAssessment::distinct()->where(['class_id'=>$classId])->get('learning_outcome_id');
         $loList = ClassAssessment::distinct()
-            ->where(['class_id'=>55])
+            ->where(['class_id'=>$classId])
             ->get('learning_outcome_id')
             ->pluck('learning_outcome_id')
             ->toArray();

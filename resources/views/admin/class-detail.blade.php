@@ -53,11 +53,11 @@
                                                 {{ $class->course->credit_theory }} (theory) {{ $class->course->credit_lab }} (lab)
                                                 </a>
                                             </li>
-                                            <li class="list-group-item"><b>Instructor </b>
-                                                <a href= {{route('admin_get_lecturer_detail', ['id'=>$class->instructor->id])}}
-                                                   class="float-right">{{ $class->instructor->name }}
-                                                </a>
-                                            </li>
+{{--                                            <li class="list-group-item"><b>Instructor </b>--}}
+{{--                                                <a href= {{route('admin_get_lecturer_detail', ['id'=>$class->instructor->id])}}--}}
+{{--                                                   class="float-right">{{ $class->instructor->name }}--}}
+{{--                                                </a>--}}
+{{--                                            </li> --}}
                                             <li class="list-group-item"><b>Group</b>
                                                 <a href="#" class="float-right"> {{ $class->group_theory }} </a>
                                             </li>

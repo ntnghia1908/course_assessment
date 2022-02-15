@@ -59,12 +59,14 @@ class ResultController extends Controller
         if(isset($resultDB))
             $resultDB->delete();
 
+
         foreach ($resultList as $result) {
             $result->class_id = $class_id;
 //            $result->classSession = ClassSession::find($class_id);
             GradingService::calculateGPA($result, $classAssessmentCourse);
             GradingService::calculateAbetScoreOfStudent($classAssessmentTools, $classAssessmentCourse, $result, $classSloClos);
             $result->save();
+            // resultDB->update();
         }
         return redirect()->back()->with(['flag' => 'success', 'message' => 'Assign student successfully!', 'key' => 'Success']);
     }

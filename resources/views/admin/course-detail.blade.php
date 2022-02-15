@@ -74,7 +74,7 @@
                                                             <thead>
                                                             <tr>
                                                                 <th style="min-width:50px;">CourseName</th>
-                                                                <th style="min-width:50px;">Instructor</th>
+{{--                                                                <th style="min-width:50px;">Instructor</th>--}}
                                                                 <th style="min-width:50px;">Group</th>
                                                                 <th style="min-width:50px;">Semester</th>
                                                                 <th style="min-width:50px;">Year</th>
@@ -87,8 +87,8 @@
                                                                     <td>
                                                                         <a href="#">{{ $classSession->course->name }}</a>
                                                                     </td>
-                                                                    <td>{{ $classSession->instructor->degree}} {{ $classSession->instructor->name}}</td>
-                                                                    <td>{{ $classSession->groupTheory }}</td>
+{{--                                                                    <td>{{ $classSession->instructor->degree}} {{ $classSession->instructor->name}}</td>--}}
+                                                                    <td>{{ $classSession->group_theory }}</td>
                                                                     <td>{{ $classSession->semester }}</td>
                                                                     <td>{{ $classSession->academic_year }}</td>
                                                                 </tr>
@@ -104,6 +104,11 @@
                                             <ul class="nav customtab">
                                                 <li class="nav-item">
                                                     <a href="#" class="nav-link active show">Assessment Tools</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="{{ route('admin_get_edit_courseAssessmentTool', ['courseId'=>$course->id]) }}"
+                                                       class="nav-link active show">Edit Abet Mapping
+                                                    </a>
                                                 </li>
                                             </ul>
                                             <!-- Tab panes -->

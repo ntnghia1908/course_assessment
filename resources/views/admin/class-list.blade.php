@@ -50,7 +50,7 @@
                     <table class="table table-striped custom-table" id="datatable">
                         <thead>
                         <tr>
-                            <th style="min-width:70px;">Instructor </th>
+                            <!-- <th style="min-width:70px;">Instructor </th> -->
                             <th style="min-width:50px;">Course Name</th>
                             <th style="min-width:50px;">Group</th>
                             <th style="min-width:50px;">Semester</th>
@@ -61,7 +61,6 @@
                         <tbody>
                         @foreach ( $classes as $cl )
                             <tr>
-                                <td>{{ $cl->instructor->name }}</td>
                                 <td>{{ $cl->course->name }} </td>
                                 <td>{{ $cl->group_theory}}</td>
                                 <td>{{ $cl->semester }}</td>

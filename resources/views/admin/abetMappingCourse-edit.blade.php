@@ -40,33 +40,20 @@
                                         <div class="card-body">
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item"><b>Course Title</b>
-                                                    <a href="{{ route('admin_get_course_detail', [ 'id' => $class->course->id]) }}"
+                                                    <a href="{{ route('admin_get_course_detail', [ 'id' => $course->id]) }}"
                                                        class="float-right">
-                                                        {{ $class->course->id }} - {{ $class->course->name }}
+                                                        {{ $course->id }} - {{ $course->name }}
                                                     </a>
                                                 </li>
                                                 <li class="list-group-item"><b>Course Level</b>
                                                     <a href="#" class="float-right">
-                                                        {{ $class->course->courseLevel->level }}
+                                                        {{ $course->courseLevel->level }}
                                                     </a>
                                                 </li>
                                                 <li class="list-group-item"><b>Credit</b>
                                                     <a href="#" class="float-right">
-                                                        {{ $class->course->credit_theory }}
-                                                        (theory) {{ $class->course->credit_lab }} (lab)
-                                                    </a>
-                                                </li>
-{{--                                                <li class="list-group-item"><b>Instructor </b>--}}
-{{--                                                    <a href={{route('admin_get_lecturer_detail', ['id'=>$class->instructor->id])}}--}}
-{{--                                                        class="float-right">{{ $class->instructor->name }}--}}
-{{--                                                    </a>--}}
-{{--                                                </li>--}}
-                                                <li class="list-group-item"><b>Group</b>
-                                                    <a href="#" class="float-right"> {{ $class->group_theory }} </a>
-                                                </li>
-                                                <li class="list-group-item"><b>Semester - Academic Year</b>
-                                                    <a href="#" class="float-right">
-                                                        {{ $class->semester }} - {{ $class->academic_year }}
+                                                        {{ $course->credit_theory }}
+                                                        (theory) {{ $course->credit_lab }} (lab)
                                                     </a>
                                                 </li>
                                             </ul>
@@ -92,11 +79,11 @@
                                                 <ul class="nav customtab">
                                                     <li class="nav-item"><a href="#" class="nav-link active show">ABET
                                                             mapping table</a></li>
-                                                    <li class="nav-item">
-                                                        <a href="{{ route('admin_get_edit_abetMapping', ['classId'=>$class->id]) }}"
-                                                           class="nav-link active show">Edit Abet Mapping
-                                                        </a>
-                                                    </li>
+{{--                                                    <li class="nav-item">--}}
+{{--                                                        <a href="{{ route('admin_get_edit_abetMapping', ['courseId'=>$course->id]) }}"--}}
+{{--                                                           class="nav-link active show">Edit Abet Mapping--}}
+{{--                                                        </a>--}}
+{{--                                                    </li>--}}
                                                 </ul>
                                                 <!-- Tab panes -->
                                                 <div class="tab-content">
@@ -220,12 +207,12 @@
             var assessments = getAbetMapping(elements)
             // console.log(assessments)
             $.ajax({
-                url: '/admin/assessment/edit',
+                url: '/admin/assessmentToolCourse/edit',
                 type: 'POST',
                 data: {
                     "assessmentTool": assessments,
                     "_token": "{{ csrf_token() }}",
-                    "class_id": {{ $class->id }}
+                    "course_id": {{ $course->id }}
                 },
                 dataType: 'json',
                 success: function (res) {
