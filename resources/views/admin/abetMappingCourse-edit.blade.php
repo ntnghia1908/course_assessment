@@ -79,11 +79,6 @@
                                                 <ul class="nav customtab">
                                                     <li class="nav-item"><a href="#" class="nav-link active show">ABET
                                                             mapping table</a></li>
-{{--                                                    <li class="nav-item">--}}
-{{--                                                        <a href="{{ route('admin_get_edit_abetMapping', ['courseId'=>$course->id]) }}"--}}
-{{--                                                           class="nav-link active show">Edit Abet Mapping--}}
-{{--                                                        </a>--}}
-{{--                                                    </li>--}}
                                                 </ul>
                                                 <!-- Tab panes -->
                                                 <div class="tab-content">
@@ -94,7 +89,8 @@
                                                                 <tr>
                                                                     <th style="min-width:50px;">LearningOutcome</th>
                                                                     @for($i=1; $i<7; $i++)
-                                                                        <th>{{ $i }}</th>@endfor
+                                                                        <th>{{ $i }}</th>
+                                                                    @endfor
                                                                     <th>Total</th>
                                                                 </tr>
                                                                 </thead>
@@ -116,7 +112,7 @@
                                                                                     <input style="width: 50px"
                                                                                            id="cell-{{$lo->id}}-{{$i}}"
                                                                                            type="number" max="100"
-                                                                                           min="0" value="0" disabled>
+                                                                                           min="0" value="0">
                                                                                 </td>
                                                                             @endif
                                                                         @endfor
@@ -144,17 +140,20 @@
         const elements = document.querySelectorAll("#abet-mapping-table td input[id^='cell']");
 
         elements.forEach(element => element.addEventListener('input', () => {
-            const assessments = getAbetMapping(elements)
-            const assessmentToolTable = document.querySelector("#abet-mapping-table");
+            const abetMapping = getAbetMapping(elements)
+            console.log()
+
+            // const assessmentToolTable = document.querySelector("#abet-mapping-table");
             let is_valid = true;
 
-            for (let clo_id in assessments) {
+            for (let clo_id in abetMapping) {
                 let sumRow = 0;
-                for (let slo_id in assessments[clo_id]) {
-                    sumRow += assessments[clo_id][slo_id];
+                for (let slo_id in abetMapping[clo_id]) {
+                    sumRow += abetMapping[clo_id][slo_id];
                 }
-                console.log(sumRow);
-                assessments[clo_id]['sum'] = sumRow;
+                // console.log(sumRow);
+                abetMapping[clo_id]['sum'] = sumRow;
+                // console.log(abetMapping);
 
                 const tdTap = document.createElement('td');
                 tdTap.className = 'flag';
@@ -169,11 +168,11 @@
                 }
                 tdTap.class = 'flag';
                 // const cloRow = document.querySelector("tr[id="+clo_id+"]");
-                const cloRow = document.querySelector("tr[id='" + clo_id + "']");
-                const flags = document.querySelectorAll("td[class='flag']");
-                flags.forEach(e => {
-                    e.remove();
-                });
+                const cloRow = document.querySelector("tr#"+clo_id);
+                const flags = document.querySelectorAll("td.flag");
+                // flags.forEach(e => {
+                //     e.remove();
+                // });
                 cloRow.appendChild(tdTap);
             }
 
@@ -186,21 +185,21 @@
         }));
 
         function getAbetMapping(elements) {
-            let assessments = {};
+            let abetMapping = {};
             elements.forEach(element => {
                 cloId = element.id.split('-')[1]; // row
                 sloId = element.id.split('-')[2]; // col
-                // console.log(sloId)
+                // console.log(cloId)
 
                 // DIFFERENT POINT FROM ASSESSMENT TOOL
-                if (cloId in assessments)
-                    assessments[cloId][sloId] = parseInt(element.value);
+                if (cloId in abetMapping)
+                    abetMapping[cloId][sloId] = parseInt(element.value);
                 else {
-                    assessments[cloId] = {};
-                    assessments[cloId][sloId] = parseInt(element.value);
+                    abetMapping[cloId] = {};
+                    abetMapping[cloId][sloId] = parseInt(element.value);
                 }
             });
-            return assessments;
+            return abetMapping;
         }
 
         document.querySelector('#submitbnt').addEventListener('click', function () {
@@ -210,7 +209,7 @@
                 url: '/admin/assessmentToolCourse/edit',
                 type: 'POST',
                 data: {
-                    "assessmentTool": assessments,
+                    "abetMapping": abetMapping,
                     "_token": "{{ csrf_token() }}",
                     "course_id": {{ $course->id }}
                 },

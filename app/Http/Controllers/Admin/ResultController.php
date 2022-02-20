@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\AsiinAssessmentTool;
+use App\AsiinClo;
+use App\AssessmentTool;
 use App\ClassAssessment;
 use App\ClassAssessmentCourse;
 use App\ClassAssessmentTool;
 use App\ClassSession;
 use App\ClassSloClo;
+use App\CloSlo;
+use App\CourseAssessment;
+use App\CourseAssessmentAsiin;
 use App\Http\Controllers\Controller;
 use App\Http\Services\GradingService;
 use App\Http\Services\ResultService;
+use App\LearningOutcome;
 use App\Result;
 use App\Student;
 use DebugBar;
@@ -69,5 +76,22 @@ class ResultController extends Controller
             // resultDB->update();
         }
         return redirect()->back()->with(['flag' => 'success', 'message' => 'Assign student successfully!', 'key' => 'Success']);
+    }
+
+    function calculateAbetScoreForCourse($courseId)
+    {
+        $courseAssessmentAsiin = CourseAssessmentAsiin::where(['course_id' => $courseId])->get();
+        $asiinAssessmentTools = AsiinAssessmentTool::where(['course_id' => $courseId])->get();
+        $courseClos = AsiinClo::where('id', 'LIKE', "$courseId%")->pluck('id'); // SELECT ID FROM ASIIN_CLO WHERE LIKE ...
+        $sloClos = CloSlo::where(['lo_id', 'IN', $courseClos])->get();
+        $resultCourse = Result::where('class_id', 'LIKE', "$courseId%");
+
+        foreach ($resultCourse as $result) {
+            GradingService::calculateGPA($result, $courseAssessmentAsiin);
+            GradingService::calculateAbetScoreOfStudent($asiinAssessmentTools, $courseAssessmentAsiin, $result, $sloClos);
+            $result->update();
+        }
+        dump($courseId);
+        return redirect()->back()->with(['flag' => 'success', 'message' => 'Abet score has been calculated!', 'key' => 'Success']);
     }
 }

@@ -58,11 +58,16 @@ Route::prefix('admin')->group(function () {
     Route::get('/student/delete/{student_id}', 'Admin\StudentController@getStudentDelele')->name('admin_delete_student');
     Route::get('/student/{student_id}', 'Admin\StudentController@getStudentDetail')->name('admin_get_student_detail');
 
-    Route::get('/assessment/edit_assessment_tool/{classId}', 'Admin\AssessmentToolController@getEditAssessmentTool')->name('admin_get_edit_assessmentTool');
-    Route::get('/assessment/edit_assessment_tool_course/{courseId}', 'Admin\AssessmentToolController@getEditCourseAssessmentTool')->name('admin_get_edit_courseAssessmentTool');
-    Route::get('/assessment/edit_course_assessment/{classId}', 'Admin\AssessmentToolController@getEditClassAssessment')->name('admin_get_edit_courseAssessment');
-    Route::get('/assessment/edit_course_assessmentCourse/{courseId}', 'Admin\AssessmentToolController@getEditCourseAssessment')->name('admin_get_edit_courseAssessment');
-    Route::get('/assessment/edit_abet_mapping_assessment/{classId}', 'Admin\AssessmentToolController@getEditAbetMapping')->name('admin_get_edit_abetMapping');
     Route::post('/assessment/edit', 'Admin\AssessmentToolController@updateAssessmentTool')->name('admin_edit_assessmentTool');
     Route::post('/assessmentToolCourse/edit', 'Admin\AssessmentToolController@updateAssessmentToolCourse')->name('admin_edit_assessmentToolCourse');
+    Route::get('/assessment/edit_assessment_tool/{classId}', 'Admin\AssessmentToolController@getEditAssessmentTool')->name('admin_get_edit_assessmentTool');
+    Route::get('/assessment/edit_assessment_tool_course/{courseId}', 'Admin\AssessmentToolController@getEditCourseAssessmentTool')->name('admin_get_edit_courseAssessmentTool');
+    Route::get('/assessment/edit_course_assessment/{classId}', 'Admin\AssessmentToolController@getEditClassAssessment')->name('admin_get_edit_classAssessment');
+    Route::get('/assessment/edit_course_assessmentCourse/{courseId}', 'Admin\AssessmentToolController@getEditCourseAssessment')->name('admin_get_edit_courseAssessment');
+
+    Route::get('/abet/calculate_abet_score_course/{courseId}', 'Admin\ResultController@calculateAbetScoreForCourse')->name('admin_calculate_abet_course');
+    Route::get('/abet/edit_abet_mapping_assessment/{classId}', 'Admin\AbetMappingController@getEditAbetMappingClass')->name('admin_get_edit_abetMapping_class');
+    Route::get('/abet/edit_abet_mapping_course/{courseId}', 'Admin\AbetMappingController@getEditAbetMappingCourse')->name('admin_get_edit_abetMapping_course');
+//    Route::get('/abet/')
+
 });

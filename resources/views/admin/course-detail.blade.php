@@ -20,6 +20,14 @@
     <div class="content-page">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                @if ( Session::has('flag') )
+                    <div class="alert alert-{{Session::get('flag')}} alert-dismissible fade show" role="alert">
+                        <strong>{{ Session::get('key') }}!</strong> {{ Session::get('message') }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="aboutprofile-sidebar">
                     <div class="row">
                         <div class="col-lg-3 col-md-12 col-sm-12 col-12">
@@ -51,6 +59,10 @@
                                             </li>
                                         </ul>
                                     </div>
+                                    <a id="calculate-abet" class="btn btn-primary"
+                                            href="{{route('admin_calculate_abet_course', ['courseId'=>$course->id])}}">
+                                        Calculate Abet Score
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +119,7 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <a href="{{ route('admin_get_edit_courseAssessmentTool', ['courseId'=>$course->id]) }}"
-                                                       class="nav-link active show">Edit Abet Mapping
+                                                       class="nav-link active show">Edit Assessment Tool
                                                     </a>
                                                 </li>
                                             </ul>
@@ -154,6 +166,11 @@
                                             <ul class="nav customtab">
                                                 <li class="nav-item"><a href="#" class="nav-link active show">ABET
                                                         mapping table</a></li>
+                                                <li class="nav-item">
+                                                    <a href="{{ route('admin_get_edit_abetMapping_course', ['courseId'=>$course->id]) }}"
+                                                       class="nav-link active show">Edit Abet Mapping
+                                                    </a>
+                                                </li>
                                             </ul>
                                             <!-- Tab panes -->
                                             <div class="tab-content">

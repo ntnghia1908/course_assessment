@@ -270,7 +270,7 @@
                                                 <li class="nav-item"><a href="#" class="nav-link active show">COURSE ASSESSMENT</a></li>
                                                 <li class="nav-item">
                                                     <a class="nav-link active show"
-                                                        href= {{route('admin_get_edit_courseAssessment', ['classId'=>$class->id])}}>
+                                                        href= {{route('admin_get_edit_classAssessment', ['classId'=>$class->id])}}>
                                                         Edit Course Assessment
                                                     </a>
                                                 </li>
@@ -358,7 +358,7 @@
                                                 <li class="nav-item"><a href="#" class="nav-link active show">ABET
                                                         mapping table</a></li>
                                                 <li class="nav-item">
-                                                    <a href="{{ route('admin_get_edit_abetMapping', ['classId'=>$class->id]) }}"
+                                                    <a href="{{ route('admin_get_edit_abetMapping_class', ['classId'=>$class->id]) }}"
                                                        class="nav-link active show">Edit Abet Mapping
                                                     </a>
                                                 </li>
