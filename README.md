@@ -8,6 +8,7 @@ https://github.com/kitloong/laravel-migrations-generator
 
 4. create model class from DB
 a. install the package: https://github.com/krlove/eloquent-model-generator
+
 b. Run commands
 `
 php artisan krlove:generate:model Assessment --table-name=assessment
