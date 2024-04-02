@@ -12,14 +12,14 @@ a. install the package: https://github.com/krlove/eloquent-model-generator
 b. Run commands
 `
 php artisan krlove:generate:model Assessment --table-name=assessment
-php artisan krlove:generate:model AssessmentTool --table-name=assessment_tool
+php artisan krlove:generate:model AssessmentTool --table-name=asiin_assessment_tool
 php artisan krlove:generate:model ClassAssessment --table-name=class_assessment
 php artisan krlove:generate:model ClassAssessmentCourse --table-name=class_assessment_course
 php artisan krlove:generate:model ClassSession --table-name=class_session
 php artisan krlove:generate:model ClassSloClo --table-name=class_slo_clo
 php artisan krlove:generate:model CloSlo --table-name=clo_slo
 php artisan krlove:generate:model Course --table-name=course
-php artisan krlove:generate:model CourseAssessment --table-name=course_assessment
+php artisan krlove:generate:model CourseAssessment --table-name=course_assessment_assin
 php artisan krlove:generate:model CourseLevel --table-name=course_level
 php artisan krlove:generate:model CourseProgram --table-name=course_program
 php artisan krlove:generate:model Discipline --table-name=discipline
